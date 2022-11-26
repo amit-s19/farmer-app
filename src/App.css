@@ -39,3 +39,17 @@
 .read-the-docs {
   color: #888;
 }
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 24px;
+  margin: 24px;
+}
+
+select {
+  margin: 12px;
+  padding: 12px;
+  border: 1px solid black;
+  border-collapse: collapse;
+}

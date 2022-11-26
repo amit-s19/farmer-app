@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { JsonToTable } from "react-json-to-table";
 import Axios from "axios";
+import { Link } from "react-router-dom";
 
-const LoanApplication = (props: any) => {
+const TrackingCard = (props: any) => {
   const [review, setReview] = useState<string>("");
   const [status, setStatus] = useState<string>("");
 
@@ -10,7 +10,20 @@ const LoanApplication = (props: any) => {
     <div>
       <div>
         <h1> Loan Application Details </h1>
-        <JsonToTable json={props.loanApplication} />
+        <table>
+          <tbody>
+            <tr>
+              <td> {props.loanApplication.order_id} </td>
+              <td> {props.loanApplication.status} </td>
+              <td> {props.loanApplication.review} </td>
+              <td>
+                <Link to={`/${props.loanApplication.order_id}`}>
+                  <button> Review </button>
+                </Link>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <div>
         <div>
@@ -50,4 +63,4 @@ const LoanApplication = (props: any) => {
   );
 };
 
-export default LoanApplication;
+export default TrackingCard;
