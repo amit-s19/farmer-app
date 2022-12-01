@@ -201,7 +201,7 @@ const ReviewPage = (props: any) => {
 
   useEffect(() => {
     if (!localStorage.getItem('token')) {
-      navigateTo('/login')
+      navigateTo('/')
     }
   }, []);
 

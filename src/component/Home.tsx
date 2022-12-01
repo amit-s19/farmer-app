@@ -9,7 +9,7 @@ const Home = (props: any) => {
   const navigateTo = useNavigate();
   useEffect(() => {
     if (!localStorage.getItem('token')) {
-      navigateTo('/login')
+      navigateTo('/')
     }
   }, []);
   useEffect(() => {
