@@ -1,9 +1,9 @@
 import axios from 'axios';
-import React, { SyntheticEvent, useCallback, useState ,FC} from 'react'
+import React, { SyntheticEvent, useCallback, useState, FC } from 'react'
 import { Button, Form, Container, Row, Col, Card } from 'react-bootstrap';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-const AapplicationId = "ef25287b-dff6-4471-9303-c106da974882";
+const ApplicationId = "0f66446f-9530-44fd-837b-106cbc5b07a4";
 
 const Login: FC = () => {
     const [loginId, setLoginId] = useState();
@@ -18,16 +18,17 @@ const Login: FC = () => {
                 Authorization: `HZmKaLCvHMJ36eChXdSpdT7IMqKXr-3rpldpCTmwBJxKFKDf-1h31QwN`
             }
         };
-        console.log("vbn:",{loginId,password})
-        axios.post(url, { loginId, password, applicationId: AapplicationId }, config).then(res => {
-            if(res?.data?.token){
-                localStorage.setItem('token',res?.data?.token);
+        console.log("vbn:", { loginId, password })
+        axios.post(url, { loginId, password, applicationId: ApplicationId }, config).then(res => {
+            if (res?.data?.token) {
+                localStorage.setItem('token', res?.data?.token);
+                localStorage.setItem('userEmail', res?.data?.user?.email);
                 navigateTo("/home")
             }
-        }).catch(err => {            
+        }).catch(err => {
             toast.error(err.message)
         });
-    }, [loginId,password]);
+    }, [loginId, password]);
 
 
     return (
@@ -41,7 +42,8 @@ const Login: FC = () => {
                                 <Form.Label>User Name</Form.Label>
                                 <Form.Control type="text" placeholder="User Id" value={loginId} onChange={(e: any) => {
                                     console.log(e.target.value)
-                                    setLoginId(e.target.value)}} />
+                                    setLoginId(e.target.value)
+                                }} />
                                 <Form.Text className="text-muted">
                                     We'll never share your email with anyone else.
                                 </Form.Text>
@@ -49,14 +51,14 @@ const Login: FC = () => {
 
                             <Form.Group className="mb-3" controlId="formBasicPassword">
                                 <Form.Label>Password</Form.Label>
-                                <Form.Control type="password" placeholder="Password" value={password} onChange={(e: any) => {setPassword(e.target.value)}} />
+                                <Form.Control type="password" placeholder="Password" value={password} onChange={(e: any) => { setPassword(e.target.value) }} />
                             </Form.Group>
-                           
+
                             <Button variant="primary" onClick={handleLogin}>
                                 Submit
                             </Button>
                         </Form>
-                        </Card>
+                    </Card>
                 </Col>
 
             </Row>
