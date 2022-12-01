@@ -47,7 +47,8 @@ const TrackingCard = (props: any) => {
           onClick={() => {
             Axios({
               method: "POST",
-              url: `http://localhost:3004/applications/review/${props.loanApplication.order_id}`,
+             //. url: `http://localhost:3004/applications/review/${props.loanApplication.order_id}`,
+              url: `http://64.227.181.5:3010/applications/review/${props.loanApplication.order_id}`,
               // withCredentials: true,
               data: {
                 review: review,

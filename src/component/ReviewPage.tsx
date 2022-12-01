@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import Axios from "axios";
 import { JsonToTable } from "react-json-to-table";
+import { Table, Form, Container, Button } from "react-bootstrap";
+import { useNavigate } from 'react-router-dom';
+import { map } from "lodash";
 
 const ReviewPage = (props: any) => {
   // application form states
@@ -12,48 +15,200 @@ const ReviewPage = (props: any) => {
   const [status, setStatus] = useState<string>();
   const [review, setReview] = useState<string>("");
   const [updateTargets, setUpdateTargets] = useState<string[]>([]);
+  const navigateTo = useNavigate();
+  const formFields = useMemo(
+    () => [
+      {
+        label: "Project Type",
+        key: "project_type",
+        value: false,
+      },
+      {
+        label: "District",
+        key: "district",
+        value: false,
+      },
+      {
+        label: "Block",
+        key: "block",
+        value: false,
+      },
+      {
+        label: "Branch",
+        key: "branch",
+        value: false,
+      },
+      {
+        label: "Loan Amount",
+        key: "loan_amount",
+        value: false,
+      },
+      {
+        label: "First Name",
+        key: "first_name",
+        value: false,
+      },
+      {
+        label: "Middle Name",
+        key: "middle_name",
+        value: false,
+      },
+      {
+        label: "Last Name",
+        key: "last_name",
+        value: false,
+      },
+      {
+        label: "Gender",
+        key: "gender",
+        value: false,
+      },
+      {
+        label: "Marital Status",
+        key: "marital_status",
+        value: false,
+      },
+      {
+        label: "Age",
+        key: "age",
+        value: false,
+      },
+      {
+        label: "Mothers Name",
+        key: "mothers_name",
+        value: false,
+      },
+      {
+        label: "Fathers Name",
+        key: "fathers_name",
+        value: false,
+      },
+      {
+        label: "Date Of Birth",
+        key: "date_of_birth",
+        value: false,
+      },
+      {
+        label: "Educational Qualitfication",
+        key: "educational_qualitfication",
+        value: false,
+      },
+      {
+        label: "PAN Number",
+        key: "PAN_Number",
+        value: false,
+      },
+      {
+        label: "Aadhar Number",
+        key: "Aadhar_Number",
+        value: false,
+      },
+      {
+        label: "Address",
+        key: "Address",
+        value: false,
+      },
+      {
+        label: "Pin Code",
+        key: "Pin_Code",
+        value: false,
+      },
+      {
+        label: "Phone number",
+        key: "Phone_number",
+        value: false,
+      },
+      {
+        label: "Email Id",
+        key: "Email_Id",
+        value: false,
+      },
+      {
+        label: "Permanent Address",
+        key: "Permanent_Address",
+        value: false,
+      },
+      {
+        label: "Permanent Pin Code",
+        key: "Permanent_Pin_Code",
+        value: false,
+      },
+      {
+        label: "Permanent Phone number",
+        key: "Permanent_Phone_number",
+        value: false,
+      },
+      {
+        label: "Permanent Email Id",
+        key: "Permanent_Email_Id",
+        value: false,
+      },
+      {
+        label: "Agricultural Income Source",
+        key: "Agricultural_Income_Source",
+        value: false,
+      },
+      {
+        label: "Agricultural Income",
+        key: "Agricultural_Income",
+        value: false,
+      },
+      {
+        label: "Other Income Source",
+        key: "Other_Income_Source",
+        value: false,
+      },
+      {
+        label: "Other Income",
+        key: "Other_Income",
+        value: false,
+      },
+      {
+        label: "Total Income",
+        key: "Total_Income",
+        value: false,
+      },
+      {
+        label: "Guarantor Name",
+        key: "Guarantor_Name",
+        value: false,
+      },
+      {
+        label: "Relationship with Guarantor",
+        key: "Relationship_with_Guarantor",
+        value: false,
+      },
+      {
+        label: "Mobile number of the guarantor",
+        key: "Mobile_number_of_the_guarantor",
+        value: false,
+      },
+      {
+        label: "Email ID of the Guarantor",
+        key: "Email_ID_of_the_Guarantor",
+        value: false,
+      },
+      {
+        label: "PAN card number of guarantor",
+        key: "PAN_card_number_of_guarantor",
+        value: false,
+      },
+    ],
+    []
+  );
 
-  const formFiels = [
-    "project_type",
-    "district",
-    "block",
-    "branch",
-    "loan_amount",
-    "first_name",
-    "middle_name",
-    "last_name",
-    "gender",
-    "marital_status",
-    "age",
-    "mothers_name",
-    "fathers_name",
-    "date_of_birth",
-    "educational_qualitfication",
-    "PAN_Number",
-    "Aadhar_Number",
-    "Address",
-    "Pin_Code",
-    "Phone_number",
-    "Email_Id",
-    "Permanent_Address",
-    "Permanent_Pin_Code",
-    "Permanent_Phone_number",
-    "Permanent_Email_Id",
-    "Agricultural_Income_Source",
-    "Agricultural_Income",
-    "Other_Income_Source",
-    "Other_Income",
-    "Total_Income",
-    "Guarantor_Name",
-    "Relationship_with_Guarantor",
-    "Mobile_number_of_the_guarantor",
-    "Email_ID_of_the_Guarantor",
-    "PAN_card_number_of_guarantor",
-  ];
+
+
+  useEffect(() => {
+    if (!localStorage.getItem('token')) {
+      navigateTo('/login')
+    }
+  }, []);
 
   useEffect(() => {
     Axios({
-      url: `http://localhost:3004/applications/${orderId}`,
+      //  url: `http://localhost:3004/applications/${orderId}`,
+      url: `http://64.227.181.5:3010/applications/${orderId}`,
       method: "GET",
     }).then((res) => {
       console.log(res.data.data.loan_applications);
@@ -61,11 +216,23 @@ const ReviewPage = (props: any) => {
     });
   }, []);
 
+
   return (
     <div className="flex flex-col justify-center items-center min-h-screen">
-      <h1 className="text-white text-4xl mb-4 font-bold text-center mt-16">
-        Application for #: {orderId}
-      </h1>
+
+      <div className="min-w-2/5 font-regular bg-white bg-opacity-70 rounded mb-16 mt-16">
+        <Container>
+          <Table bordered>
+            <tbody>
+              <tr>
+                <td>Application ID</td>
+                <td>{orderId}</td>
+              </tr>
+            </tbody>
+          </Table>
+        </Container>
+      </div>
+
       <div className="min-w-2/5 font-regular bg-white bg-opacity-70 rounded mb-16 px-11 py-16">
         <div>
           <JsonToTable json={loanApplication} />
@@ -91,79 +258,97 @@ const ReviewPage = (props: any) => {
           </div>
           <div>
             <label htmlFor="updateFields"> Select Fields To Update </label>
-            <table>
+            <Table>
               <thead>
                 <tr>
                   <th> Field </th>
                   <th> Should be updated? </th>
                 </tr>
               </thead>
-            </table>
-            {formFiels.map((field) => {
-              return (
-                <form>
-                  <label className="block text-gray-700 text-md font-regular mb-2">
-                    {" "}
-                    {field}{" "}
-                  </label>
-                  <input
-                    type="checkbox"
-                    value={field}
-                    className="shadow appearance-none border rounded py-2 px-2 text-gray-700 focus:outline-none focus:shadow-outline bg-white"
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setUpdateTargets([...updateTargets, e.target.value]);
-                      } else {
-                        setUpdateTargets(
-                          updateTargets.filter(
-                            (item) => item !== e.target.value
-                          )
-                        );
-                      }
-                    }}
-                  />
-                </form>
-              );
-            })}
+            </Table>
+
+            <Table>
+              <thead>
+                <tr>
+                  <th>Application Field</th>
+                  <th>Issue</th>
+                  <th>Request Updates</th>
+                </tr>
+              </thead>
+              <tbody>
+                {map(formFields, (field: { key: string; label: string }) => (
+                  <tr key={field.label}>
+                    <td>
+                      <label className="block text-gray-700 text-md font-regular mb-2">
+                        {field.label}
+                      </label>
+                    </td>
+                    <td>
+                      <Form.Control
+                        type="text"
+                        placeholder="Write your issue"
+                      />
+                    </td>
+                    <td className="text-center">
+                      <Form.Group
+                        className="mb-3"
+                        controlId="formBasicCheckbox"
+                      >
+                        <Form.Check
+                          type="checkbox"
+                          onChange={(e) => {
+                            console.log("vvv hello:", { e });
+                            if (e.target.checked) {
+                              setUpdateTargets([...updateTargets, field.key]);
+                            } else {
+                              setUpdateTargets(
+                                updateTargets.filter(
+                                  (item) => item !== field.key
+                                )
+                              );
+                            }
+                          }}
+                        />
+                      </Form.Group>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
           </div>
           <div>
-            <label
-              htmlFor="review"
-              className="block text-gray-700 text-md font-regular mb-2"
-            >
-              {" "}
-              Review{" "}
-            </label>
-            <input
-              type="text"
-              id="review"
-              name="review"
-              onChange={(e) => setReview(e.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
+            <Form>
+              <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Label>Review</Form.Label>
+                <Form.Control type="text"
+                  id="review"
+                  name="review"
+                  onChange={(e) => setReview(e.target.value)} />
+
+              </Form.Group>
+            </Form>
+
           </div>
-          <div>
-            <button
-              type="submit"
-              className="bg-blue-800 hover:bg-blue-900 text-white font-medium py-1 px-4 rounded focus:outline-none focus:shadow-outline my-2 w-full text-lg mt-8"
-              onClick={(e) => {
-                const payload = {
-                  review: review,
-                  status: status,
-                  update_targets: updateTargets,
-                };
-                Axios({
-                  method: "POST",
-                  url: `http://localhost:3004/applications/review/${orderId}`,
-                  data: payload,
-                }).then((res) => {
-                  alert(res.data);
-                });
-              }}
-            >
+          <div className="d-grid gap-2">
+            <Button variant="primary" size="lg" type="submit" onClick={(e) => {
+              const payload = {
+                review: review,
+                status: status,
+                update_targets: updateTargets,
+              };
+              Axios({
+                method: "POST",
+                //url: `http://localhost:3004/applications/review/${orderId}`,
+                url: `http://64.227.181.5:3010/applications/review/${orderId}`,
+                data: payload,
+              }).then((res) => {
+                alert(res.data);
+              });
+            }}>
               Submit Review
-            </button>
+            </Button>
           </div>
+
         </div>
       </div>
     </div>
